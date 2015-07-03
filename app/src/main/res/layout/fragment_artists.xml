@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/abc_list_item_padding_horizontal_material"
+    android:paddingRight="@dimen/abc_list_item_padding_horizontal_material"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:id="@+id/fragment_artists"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/artist_text"
+        android:selectAllOnFocus="true"
+        android:inputType="textCapWords"
+        android:hint="@string/artist_hint"
+        android:singleLine="true" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/listview_artist"
+        android:gravity="center_vertical"
+        android:choiceMode="singleChoice"
+        android:layout_weight="1"
+        android:smoothScrollbar="true"
+        android:scrollbars="none"/>
+
+</LinearLayout>

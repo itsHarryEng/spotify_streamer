@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Spotify Streamer</string>
+
+    <!-- Titles -->
+    <string name="title_activity_tracks">Top 10 Tracks</string>
+
+    <!-- Menu Items -->
+    <string name="action_settings">Settings</string>
+
+    <!-- Generic constants -->
+    <string name="artist_hint">Search for your Favorite Music Artist!</string>
+
+    <!-- 508 -->
+    <string name="album_image_description">Album Cover</string>
+
+    <!-- Error messages -->
+    <string name="no_results">No artist found. Please refine your search.</string>
+    <string name="error_generic">Uh-oh! Something went wrong or we lost connectivity.</string>
+    <string name="error_connectivity">Issues with connectivity. Try again.</string>
+
+</resources>

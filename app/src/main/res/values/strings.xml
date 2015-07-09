@@ -28,5 +28,6 @@
     <string name="album_image_description">Album Cover</string>
 
     <!-- Error messages -->
-    <string name="no_results">No artist found. Please refine your search.</string>
+    <string name="no_artist_results">No artist(s) found. Please refine your search.</string>
+    <string name="no_track_results">No track(s) found. Please choose another artist.</string>
 </resources>

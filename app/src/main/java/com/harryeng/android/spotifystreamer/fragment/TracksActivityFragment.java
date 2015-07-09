@@ -191,13 +191,16 @@ public class TracksActivityFragment extends Fragment {
             } catch (RetrofitError error) {
                 Log.e(LOG_TAG, error.toString());
 
-                // The ArtistDTO class has extra field which can store a message. Like an Exception for example.
+                // The TrackDTO class has extra field which can store a message. Like an Exception for example.
                 List<TrackDTO> trackDTOList = new ArrayList<>();
                 trackDTOList.add(new TrackDTO(error.getMessage()));
                 return trackDTOList; // Indicate to the user that the Spotify connection failed.
             }
 
-            if (null == results)
+            // If results, tracks, or track size is null, return null to display toast.
+            if ((null == results) ||
+                    (null == results.tracks) ||
+                    (0 == results.tracks.size()))
                 return null;
 
             List<TrackDTO> trackDTOList = new ArrayList<>();
@@ -245,7 +248,18 @@ public class TracksActivityFragment extends Fragment {
                         Toast.makeText(getActivity(), trackDTO.getExtra(), Toast.LENGTH_SHORT).show();
                     trackCount++;
                 }
+            } else {
+                clearAdapter();
+                Toast.makeText(getActivity(), R.string.no_track_results, Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    /**
+     * Clear the adapter
+     */
+    private void clearAdapter() {
+        mTrackAdapter.clear();
+        mTrackAdapter.notifyDataSetChanged();
     }
 }

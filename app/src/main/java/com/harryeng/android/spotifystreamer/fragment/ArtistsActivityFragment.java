@@ -238,7 +238,7 @@ public class ArtistsActivityFragment extends Fragment {
                 }
             } else {
                 clearAdapter();
-                Toast.makeText(getActivity(), R.string.no_results, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.no_artist_results, Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -7,14 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.harryeng.android.spotifystreamer.R;
 import com.harryeng.android.spotifystreamer.dto.ArtistDTO;
 import com.squareup.picasso.Picasso;
+import kaaes.spotify.webapi.android.models.Artist;
 
 import java.util.List;
-
-import kaaes.spotify.webapi.android.models.Artist;
 
 /**
  * {@link SpotifyArtistAdapter} exposes a list of artist or albums and tracks
@@ -52,7 +50,8 @@ public class SpotifyArtistAdapter extends ArrayAdapter<ArtistDTO> {
         ArtistDTO artistDTO = getItem(position);
 
         // Get the first image if applicable and populate the artist image.
-        if (null != artistDTO.getImageURL())
+        String artistImageUrl = artistDTO.getImageURL();
+        if (null != artistImageUrl && !artistImageUrl.isEmpty())
             Picasso.with(getContext()).load(artistDTO.getImageURL()).into(viewHolder.artistImageView);
 
         // Populate the artist name

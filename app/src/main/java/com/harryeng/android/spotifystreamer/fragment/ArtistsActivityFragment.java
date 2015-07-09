@@ -16,20 +16,18 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.harryeng.android.spotifystreamer.R;
 import com.harryeng.android.spotifystreamer.activity.TracksActivity;
 import com.harryeng.android.spotifystreamer.adapter.SpotifyArtistAdapter;
 import com.harryeng.android.spotifystreamer.dto.ArtistDTO;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
 import retrofit.RetrofitError;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -202,11 +200,11 @@ public class ArtistsActivityFragment extends Fragment {
             try {
                 artistsPager = spotify.searchArtists(params[0]);
             } catch (RetrofitError error) {
-                Log.e(LOG_TAG, getString(R.string.error_generic));
+                Log.e(LOG_TAG, error.toString());
 
                 // The ArtistDTO class has extra field which can store a message. Like an Exception for example.
                 List<ArtistDTO> artistDTOList = new ArrayList<>();
-                artistDTOList.add(new ArtistDTO(getString(R.string.error_connectivity)));
+                artistDTOList.add(new ArtistDTO(error.getMessage()));
                 return artistDTOList; // Indicate to the user that the Spotify connection failed.
             }
 
@@ -233,11 +231,10 @@ public class ArtistsActivityFragment extends Fragment {
             if (results != null) {
                 clearAdapter();
                 for (ArtistDTO artistDTO : results) {
-                    // If there's a message, display that instead of adding it to the Adapter.
-                    if (null != artistDTO.getExtra())
-                        Toast.makeText(getActivity(), artistDTO.getExtra(), Toast.LENGTH_SHORT).show();
-                    else
+                    if (null == artistDTO.getExtra()) // If there's no issue, add; otherwise show toast.
                         mArtistAdapter.add(artistDTO);
+                    else
+                        Toast.makeText(getActivity(), artistDTO.getExtra(), Toast.LENGTH_SHORT).show();
                 }
             } else {
                 clearAdapter();

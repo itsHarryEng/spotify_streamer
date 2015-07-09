@@ -1,18 +1,23 @@
 package com.harryeng.android.spotifystreamer.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.harryeng.android.spotifystreamer.R;
+import com.harryeng.android.spotifystreamer.utility.Utility;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    private String mLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mLocation = Utility.getPreferredLocation(this);
+
         setContentView(R.layout.activity_main);
     }
 
@@ -33,9 +38,19 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String location = Utility.getPreferredLocation(this);
+        if (location != null && !location.equals(mLocation)) {
+            mLocation = location;
+        }
     }
 }

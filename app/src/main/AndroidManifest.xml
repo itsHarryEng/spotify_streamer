@@ -21,6 +21,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/action_settings"
+            android:theme="@style/SettingsTheme"
+            android:parentActivityName=".activity.MainActivity">
+        <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
             android:name=".activity.TracksActivity"
             android:label="@string/title_activity_tracks"
             android:parentActivityName=".activity.MainActivity">

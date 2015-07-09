@@ -1,26 +1,28 @@
 package com.harryeng.android.spotifystreamer.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
-
 import com.harryeng.android.spotifystreamer.R;
 import com.harryeng.android.spotifystreamer.dto.TrackDTO;
 import com.squareup.picasso.Picasso;
+import kaaes.spotify.webapi.android.models.Tracks;
 
 import java.util.List;
-
-import kaaes.spotify.webapi.android.models.Tracks;
 
 /**
  * {@link SpotifyTrackAdapter} exposes a list of artist or albums and tracks
  * from a {@link ArrayAdapter<Tracks>} to a {@link android.widget.ListView}.
  */
 public class SpotifyTrackAdapter extends ArrayAdapter<TrackDTO> {
+
+    private int mPosition = ListView.INVALID_POSITION;
 
     public SpotifyTrackAdapter(Context context, int resource, List<TrackDTO> objects) {
         super(context, resource, objects);
@@ -50,6 +52,11 @@ public class SpotifyTrackAdapter extends ArrayAdapter<TrackDTO> {
 
         ViewHolder viewHolder = new ViewHolder(convertView);
 
+        if (position == mPosition)
+            convertView.setBackgroundColor(getContext().getResources().getColor(R.color.spotify_green));
+        else
+            convertView.setBackgroundColor(Color.TRANSPARENT);
+
         // Get the track data item for this position
         TrackDTO trackDTO = getItem(position);
 
@@ -66,5 +73,9 @@ public class SpotifyTrackAdapter extends ArrayAdapter<TrackDTO> {
 
         // Return the completed view to render on screen
         return convertView;
+    }
+
+    public void setPosition(int position) {
+        this.mPosition = position;
     }
 }

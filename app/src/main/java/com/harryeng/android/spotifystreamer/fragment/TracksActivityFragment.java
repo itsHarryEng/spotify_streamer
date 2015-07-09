@@ -11,17 +11,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.harryeng.android.spotifystreamer.R;
 import com.harryeng.android.spotifystreamer.adapter.SpotifyTrackAdapter;
 import com.harryeng.android.spotifystreamer.dto.TrackDTO;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
+import com.harryeng.android.spotifystreamer.utility.Utility;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Image;
@@ -30,6 +26,10 @@ import kaaes.spotify.webapi.android.models.Tracks;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -41,6 +41,7 @@ public class TracksActivityFragment extends Fragment {
     private static final String RETRIEVE_DATA = "tracks.activity.fragment.retrieve.data";
 
     private SpotifyTrackAdapter mTrackAdapter;
+    ListView mListView;
     private boolean mRetrieveData = true; // Set the orientation flag to retrieve data initially
 
     public TracksActivityFragment() {
@@ -62,19 +63,18 @@ public class TracksActivityFragment extends Fragment {
 
         getTopTracks(); // Grab the top 10 tracks
 
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_tracks);
-        listView.setAdapter(mTrackAdapter);
+        mListView = (ListView) rootView.findViewById(R.id.listview_tracks);
+        mListView.setAdapter(mTrackAdapter);
 
-        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                TrackDTO trackDTO = mTrackAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), TracksActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, trackDTO.getId());
-                startActivity(intent);
+                TrackDTO trackDTO = mTrackAdapter.getItem(position); // Eventually, this will do something.
+                mTrackAdapter.setPosition(position); // Set the item to highlight the new Spotify green color (not a fan of new shade).
+                mTrackAdapter.notifyDataSetChanged(); // Refreshes the adapter and does not reset the position to the top!
             }
-        });*/
+        });
 
         return rootView;
     }
@@ -150,17 +150,14 @@ public class TracksActivityFragment extends Fragment {
                 return null;
             }
 
-            /*
-                Searching for tracks requires the country code.
-                It's currently hard coded...sorry folks outside the US.
-                I could add a settings in the preference at some point.
-             */
+            // Searching for tracks requires the country code which is set in the settings preference.
             RestAdapter restAdapter = new RestAdapter.Builder()
                     .setEndpoint(SpotifyApi.SPOTIFY_WEB_API_ENDPOINT)
                     .setRequestInterceptor(new RequestInterceptor() {
                         @Override
                         public void intercept(RequestFacade request) {
-                            request.addQueryParam(SpotifyService.COUNTRY, "US");
+                            String locationSetting = Utility.getPreferredLocation(getActivity());
+                            request.addQueryParam(SpotifyService.COUNTRY, locationSetting);
                         }
                     })
                     .build();
@@ -171,11 +168,11 @@ public class TracksActivityFragment extends Fragment {
             try {
                 results = spotify.getArtistTopTrack(params[0]);
             } catch (RetrofitError error) {
-                Log.e(LOG_TAG, getString(R.string.error_generic));
+                Log.e(LOG_TAG, error.toString());
 
                 // The ArtistDTO class has extra field which can store a message. Like an Exception for example.
                 List<TrackDTO> trackDTOList = new ArrayList<>();
-                trackDTOList.add(new TrackDTO(getString(R.string.error_connectivity)));
+                trackDTOList.add(new TrackDTO(error.getMessage()));
                 return trackDTOList; // Indicate to the user that the Spotify connection failed.
             }
 
@@ -221,10 +218,10 @@ public class TracksActivityFragment extends Fragment {
                 Iterator iterator = results.iterator();
                 while (iterator.hasNext() && trackCount < 10) {
                     TrackDTO trackDTO = (TrackDTO) iterator.next();
-                    if (null != trackDTO.getExtra())
-                        Toast.makeText(getActivity(), trackDTO.getExtra(), Toast.LENGTH_SHORT).show();
-                    else
+                    if (null == trackDTO.getExtra()) // If there's no issue, add; otherwise show toast.
                         mTrackAdapter.add(trackDTO);
+                    else
+                        Toast.makeText(getActivity(), trackDTO.getExtra(), Toast.LENGTH_SHORT).show();
                     trackCount++;
                 }
             }

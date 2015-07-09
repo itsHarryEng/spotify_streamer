@@ -4,7 +4,8 @@
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:padding="@dimen/abc_list_item_padding_horizontal_material"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+        >
 
     <ImageView
         android:id="@+id/list_item_art_imageview"
@@ -22,14 +23,12 @@
         <TextView
             android:id="@+id/list_item_track_textview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="C.R.E.A.M."/>
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/list_item_album_textview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="36 Chambers"/>
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

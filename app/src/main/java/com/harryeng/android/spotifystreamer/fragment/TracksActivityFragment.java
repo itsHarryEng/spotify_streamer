@@ -39,9 +39,11 @@ public class TracksActivityFragment extends Fragment {
     private static final String LOG_TAG = TracksActivityFragment.class.getSimpleName();
     private static final String TRACK_LIST = "tracks.activity.fragment.track.list";
     private static final String RETRIEVE_DATA = "tracks.activity.fragment.retrieve.data";
+    private static final String SELECTED_KEY = "selected_position";
 
     private SpotifyTrackAdapter mTrackAdapter;
     ListView mListView;
+    private int mPosition = ListView.INVALID_POSITION;
     private boolean mRetrieveData = true; // Set the orientation flag to retrieve data initially
 
     public TracksActivityFragment() {
@@ -71,8 +73,8 @@ public class TracksActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 TrackDTO trackDTO = mTrackAdapter.getItem(position); // Eventually, this will do something.
-                mTrackAdapter.setPosition(position); // Set the item to highlight the new Spotify green color (not a fan of new shade).
-                mTrackAdapter.notifyDataSetChanged(); // Refreshes the adapter and does not reset the position to the top!
+                mPosition = position;
+                highlightPosition(position);
             }
         });
 
@@ -92,6 +94,9 @@ public class TracksActivityFragment extends Fragment {
             bundle.putParcelableArrayList(TRACK_LIST, (ArrayList<? extends Parcelable>) trackList);
         }
         bundle.putBoolean(RETRIEVE_DATA, mRetrieveData); // Store the flag value
+        if (mPosition != ListView.INVALID_POSITION)
+            bundle.putInt(SELECTED_KEY, mPosition);
+
     }
 
     @Override
@@ -105,7 +110,23 @@ public class TracksActivityFragment extends Fragment {
                     mTrackAdapter.add(trackDTO);
                 }
             }
+            if (null != bundle.get(SELECTED_KEY)) {
+                int position = (int) bundle.get(SELECTED_KEY);
+                if (position != ListView.INVALID_POSITION) {
+                    mPosition = position;
+                    highlightPosition(position);
+                }
+            }
         }
+    }
+
+    /**
+     * Highlights the selected item and refreshes the adapter
+     * @param position // Where to set the item position
+     */
+    private void highlightPosition(int position) {
+        mTrackAdapter.setPosition(position); // Set the item to highlight the new Spotify green color (not a fan of new shade).
+        mTrackAdapter.notifyDataSetChanged(); // Refreshes the adapter and does not reset the position to the top!
     }
 
     /**

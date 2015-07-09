@@ -219,7 +219,7 @@ public class ArtistsActivityFragment extends Fragment {
                 artistDTO.setId(artist.id);
                 artistDTO.setArtistName(artist.name);
                 if (!artist.images.isEmpty())
-                    artistDTO.setImageURL(artist.images.get(0).url);
+                    artistDTO.setImageURL(artist.images.get(0).url); // Get the largest
                 artistDTOList.add(artistDTO);
             }
 

@@ -121,7 +121,7 @@ public class TracksActivityFragment extends Fragment {
     }
 
     /**
-     * Highlights the selected item and refreshes the adapter
+     * Highlights the selected item and refresh the adapter
      * @param position // Where to set the item position
      */
     private void highlightPosition(int position) {

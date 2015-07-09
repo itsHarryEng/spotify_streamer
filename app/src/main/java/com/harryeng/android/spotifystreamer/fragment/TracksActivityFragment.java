@@ -171,7 +171,12 @@ public class TracksActivityFragment extends Fragment {
                 return null;
             }
 
-            // Searching for tracks requires the country code which is set in the settings preference.
+            /**
+             * Searching for tracks requires the country code which is set in the settings preference.
+             *
+             * Currently, only US and Canada are on the list but any ISO 3166-1 alpha-2 codes would work.
+             * They would need to be added to the arrays.xml resource.
+             * */
             RestAdapter restAdapter = new RestAdapter.Builder()
                     .setEndpoint(SpotifyApi.SPOTIFY_WEB_API_ENDPOINT)
                     .setRequestInterceptor(new RequestInterceptor() {
